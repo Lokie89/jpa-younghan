@@ -1,6 +1,8 @@
 # 자바 ORM 표준 JPA 프로그래밍
+
 - [1-1 SQL을 직접 다룰 때 발생하는 문제점](#1-1-SQL을-직접-다룰-때-발생하는-문제점)
 - [1-2 패러다임의 불일치](#1-2-패러다임의-불일치)
+
 ### 1-1 SQL을 직접 다룰 때 발생하는 문제점
 
 ##### SQL 을 매핑시켜 객체를 만들 때 개발자가 작성해야 하는 것은 보통
@@ -135,12 +137,68 @@ class Team {
 class Service {
     public Order getMemberOrder() {
         Member member = jpa.find(Member.class, memberId);
-        
+
         Order order = member.getOrder();
         order.getOrderDate(); // Order 를 사용하는 시점에 SELECT ORDER 를 실행
     }
 }
 ```
+
     위와 같이 실제 Member 를 find 할 때는 Order 테이블을 조회하지 않았다가
     Order 가 가지고 있는 참조를 사용하게 될 경우에 SELECT 를 통하여 데이터를 조회한다.
+
 #### 이를 객체가 사용될 때까지 조회를 미룬다고 해서 ***지연로딩*** 이라고 한다.
+
+##### 비교 표현
+
+    DB 테이블의 한 로우의 데이터를 가지고 비교를 한다고 하자
+    DAO 코드를 작성하고
+
+```java
+class MemberDao {
+    public Member getMember(String memberId) {
+        String sql = "SELECT * FROM MEMBER WHERE MEMBER_ID = ?";
+        // ... 데이터 가져와서 넣음
+        return new Member(memberId, name);
+    }
+
+    public boolean 멤버_비교() {
+        String memberId = "100";
+        Member member1 = getMember(memberId);
+        Member member2 = getMember(memberId);
+        return member1 == member2;
+    }
+}
+```
+
+    멤버_비교 메서드는 같은 memberId 를 넣어 조회한 Member 객체지만
+    실제 비교에서는 false 값을 내놓는다.
+    데이터는 같은 데이터를 조회했지만, 객체 입장에서는 다른 객체이기 때문이다.
+
+    이런 불일치를 해결하기 위해서 개발자는 또 중간 역할을 해줘야 한다.
+    예를 들면 데이터를 컬렉션에 담아 같은 인덱스를 뽑아온다던지,
+    동등성 비교를 위한 equals, hashCode 메서드를 오버라이드 한다던지?
+
+**그러나 JPA 는 이를 해결해 준다.**
+
+```java
+class MemberDao {
+    public boolean 멤버_비교() {
+        String memberId = "100";
+        Member member1 = jpa.find(Member.class, memberId);
+        Member member2 = jpa.find(Member.class, memberId);
+        return member1 == member2;
+    }
+}
+```
+
+JPA 가 ``같은 트랜잭션일 때`` 같은 객체가 조회되는 것을 보장해준다.
+
+#### 정리
+    RDB 와 객체 사이에는 다른점이 존재한다.
+    그 다른점을 보완해주기 위해 개발자는 데이터를 객체로, 객체를 데이터로 고치기 위한 로직을 만들어야 한다.
+    1. 상속을 지원해준다.
+    2. 객체사이의 연관관계를 지원해준다.
+    3. 객체안의 객체의 연관관계도 지원해준다. 이는 지연로딩이라는 방법을 통한다. ( 리소스를 덜 잡아먹으려고 ? )
+    4. 객체와 데이터간의 동일성을 해결해준다. ( id 만 이겠죠 ? )
+
