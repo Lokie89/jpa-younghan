@@ -228,3 +228,27 @@ JPA 가 ``같은 트랜잭션일 때`` 같은 객체가 조회되는 것을 보�
   - 패러다임 불일치 해결
   - 최적화 ( 뒤에 나옴 )
   - 데이터 베이스마다 다른 SQL 문을 익히지 않아도 됨
+  
+### 2-1 JPA 설정
+- gradle 설정
+    - hibernate core
+    - hibernate entity manager
+    - hibernate jpa
+    - h2database
+- jpa 설정 값을 담은 persistence.xml
+    - jdbc driver
+    - jdbc user
+    - jdbc password
+    - jdbc url
+    - hibernate dialect
+
+#### ***dialect*** 란 무엇인가?
+    JPA 의 구현체는 명령을 SQL 문으로 바꾸어 jdbc 에게 전달합니다.
+    이 때 전달 받을 DB 에 따라서 SQL 문이 다르게 작용할 수 있습니다.
+    DB 마다 SQL 정책이 다르기 떄문입니다.
+    예로 MYSQL 은 VARCHAR, ORACLE 은 VARCHAR2 를 사용한다거나,
+    SQL 표준은 SUBSTRING, ORACLE 은 SUBSTR 등을 사용하는 경우입니다.
+    이런 경우를 위해 JPA 구현체는 이를 DB 에 맞게 변환 시킬 수 있는
+    dialect 정책을 가지고 있습니다.
+    설정에서 사용하는 데이터 베이스에 대한 dialect 정책만 변경해주면 됩니다.
+    
