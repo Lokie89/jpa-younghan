@@ -4,6 +4,10 @@
 - [1-2 패러다임의 불일치](#1-2-패러다임의-불일치)
     - [지연로딩은 ***왜*** 사용하는가 ?](#지연로딩은-***왜***-사용하는가-?)
 - [1-3 JPA 란 무엇인가?](#1-3-JPA-란-무엇인가?)
+- [2-1 JPA 설정](#2-1-JPA-설정)
+    - [***dialect*** 란 무엇인가?](#***dialect***-란-무엇인가?)
+- [2-6 EntityManager](#2-6-EntityManager)
+    - [***JPQL*** 이란?](#***JPQL***-이란?)
 
 ### 1-1 SQL을 직접 다룰 때 발생하는 문제점
 
@@ -197,6 +201,7 @@ class MemberDao {
 JPA 가 ``같은 트랜잭션일 때`` 같은 객체가 조회되는 것을 보장해준다.
 
 #### 정리
+
     RDB 와 객체 사이에는 다른점이 존재한다.
     그 다른점을 보완해주기 위해 개발자는 데이터를 객체로, 객체를 데이터로 고치기 위한 로직을 만들어야 한다.
     1. 상속을 지원해준다.
@@ -205,31 +210,34 @@ JPA 가 ``같은 트랜잭션일 때`` 같은 객체가 조회되는 것을 보�
     4. 객체와 데이터간의 동일성을 해결해준다. ( id 만 이겠죠 ? )
 
 #### 지연로딩은 ***왜*** 사용하는가 ?
+
 - 객체의 연관관계가 많을 수록, 또 후에 늘어날 가능성이 많으므로<br>
-    한꺼번에 가져오는 것은 리소스의 부담을 가할 수 있기 때문에 [출처](https://velog.io/@bread_dd/JPA는-왜-지연-로딩을-사용할까)
-  
+  한꺼번에 가져오는 것은 리소스의 부담을 가할 수 있기 때문에 [출처](https://velog.io/@bread_dd/JPA는-왜-지연-로딩을-사용할까)
+
 ### 1-3 JPA 란 무엇인가?
+
 - JAVA 진영의 ORM 기술 표준 인터페이스
-  - ORM : Object 객체와 Relational 관계를 Mapping 맺어줌.
+    - ORM : Object 객체와 Relational 관계를 Mapping 맺어줌.
 - JAVA -(``명령``)-> JPA -(``SQL``)-> JDBC -(``SQL``)-> DB
 - JAVA <-(``패러다임 극복, 객체매핑``)- JPA <-(``데이터``)- JDBC <-(``데이터``)- DB
 - JPA 가 하는일
-  - Entity 분석
-  - SQL 생성
-  - [패러다임 불일치](#1-2-패러다임의-불일치) 해결
-  - 리턴값이 있을 경우 ResultSet 을 통한 객체 매핑
+    - Entity 분석
+    - SQL 생성
+    - [패러다임 불일치](#1-2-패러다임의-불일치) 해결
+    - 리턴값이 있을 경우 ResultSet 을 통한 객체 매핑
 - 왜 탄생했는가
-  - EJB 라는 기술 안에 엔티티 빈이라는 ORM 이 있었지만, 아주 복잡하고 J2EE 의존성이 높음<br> 
-    다음 주자인 hibernate 가 출현, 그를 기반으로 JPA 를 만들게 됨
+    - EJB 라는 기술 안에 엔티티 빈이라는 ORM 이 있었지만, 아주 복잡하고 J2EE 의존성이 높음<br>
+      다음 주자인 hibernate 가 출현, 그를 기반으로 JPA 를 만들게 됨
 - 왜 쓰는가
-  - SQL 의존성 감소
-    - SQL 만들어서 JDBC 에 전달 로직 안 만들어도 됨 
-    - 필드 추가 삭제 시 SQL 수정 안해도 됨
-  - 패러다임 불일치 해결
-  - 최적화 ( 뒤에 나옴 )
-  - 데이터 베이스마다 다른 SQL 문을 익히지 않아도 됨
-  
+    - SQL 의존성 감소
+        - SQL 만들어서 JDBC 에 전달 로직 안 만들어도 됨
+        - 필드 추가 삭제 시 SQL 수정 안해도 됨
+    - 패러다임 불일치 해결
+    - 최적화 ( 뒤에 나옴 )
+    - 데이터 베이스마다 다른 SQL 문을 익히지 않아도 됨
+
 ### 2-1 JPA 설정
+
 - gradle 설정
     - hibernate core
     - hibernate entity manager
@@ -243,6 +251,7 @@ JPA 가 ``같은 트랜잭션일 때`` 같은 객체가 조회되는 것을 보�
     - hibernate dialect
 
 #### ***dialect*** 란 무엇인가?
+
     JPA 의 구현체는 명령을 SQL 문으로 바꾸어 jdbc 에게 전달합니다.
     이 때 전달 받을 DB 에 따라서 SQL 문이 다르게 작용할 수 있습니다.
     DB 마다 SQL 정책이 다르기 떄문입니다.
@@ -251,4 +260,46 @@ JPA 가 ``같은 트랜잭션일 때`` 같은 객체가 조회되는 것을 보�
     이런 경우를 위해 JPA 구현체는 이를 DB 에 맞게 변환 시킬 수 있는
     dialect 정책을 가지고 있습니다.
     설정에서 사용하는 데이터 베이스에 대한 dialect 정책만 변경해주면 됩니다.
-    
+
+### 2-6 EntityManager
+
+- 엔티티매니저는 JPA 의 대부분 기능을 제공한다.
+    - 엔티티를 관리할 수 있다. (영속성 컨텍스트)
+    - 트랜잭션 생성
+        - 항상 트랜잭션 안에서 데이터 수정
+
+```java
+public class JpaMain {
+    public static void main(String[] args) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpabook");
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            logic(em);
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {
+            em.close();
+        }
+        emf.close();
+    }
+}
+```
+
+- 엔티티매니저는 EntityManagerFactory 로부터 만들어 진다.
+    - 속성이 충족된 공장에서 엔티티매니저를 찍어낸다.
+    - 공장은 하나만 만들길 추천한다. (비용)
+- 스레드간의 엔티티매니저 공유는 안된다.
+
+- Tx begin -(``tx 시작``)-> EntityManager -(``Entity 분석 및 SQL 생성, 보관``)-> Tx commit -(`` tx 커밋, SQL``)-> DB
+
+#### ***JPQL*** 이란?
+
+    JPA 를 통하여 사용하는 '객체' 를 대상으로 한 SQL 문
+    기본적인 SQL 문과 대부분 비슷하다.
+    하지만 위에서 말했듯이 사용하는 Entity 객체를 기준으로 쿼리를 작성한다
+    SELECT m FROM Member m 일때
+    Member 는 테이블 MEMBER 가 아닌 객체 Member 이다.
+    사용법은 하면서 익히자.
