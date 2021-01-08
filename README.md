@@ -8,6 +8,7 @@
     - [***dialect*** 란 무엇인가?](#***dialect***-란-무엇인가?)
 - [2-6 EntityManager](#2-6-EntityManager)
     - [***JPQL*** 이란?](#***JPQL***-이란?)
+    - [EntityManager 의 ***동시성***](#EntityManager-의-***동시성***)
 
 ### 1-1 SQL을 직접 다룰 때 발생하는 문제점
 
@@ -303,3 +304,13 @@ public class JpaMain {
     SELECT m FROM Member m 일때
     Member 는 테이블 MEMBER 가 아닌 객체 Member 이다.
     사용법은 하면서 익히자.
+
+#### EntityManager 의 ***동시성***
+
+- EntityManager 는 다른 스레드 사이에서 공유해선 안 됨.
+    - EntityManager 는 스레드 세이프 하지 않다.
+    - EntityManager 사용 시 예외가 발생하면 롤백 한다.
+        - 만약 method1 스레드와 method2 스레드가 같은 manager 를 사용할 때<br>
+          method1 이 완벽히 끝나더라도 method2 가 예외를 발생시키면 둘다 안됨.
+    - 영속성 컨텍스트가 가지고 있는 캐시가 OutOfMemoryException. ( 이건 뒤에 다시 )
+- [출처](https://medium.com/@SlackBeck/jpa-entitymanager와-동시성-e30f841fcdf8)
