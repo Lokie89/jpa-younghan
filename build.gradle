@@ -15,7 +15,7 @@ dependencies {
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.10.Final'
     compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.4.10.Final'
     compile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: '1.0.0.Final'
-    testCompile group: 'com.h2database', name: 'h2', version: '1.4.197'
+    testCompile group: 'com.h2database', name: 'h2', version: '1.4.199'
 }
 
 test {

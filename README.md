@@ -9,6 +9,8 @@
 - [2-6 EntityManager](#2-6-EntityManager)
     - [***JPQL*** 이란?](#***JPQL***-이란?)
     - [EntityManager 의 ***동시성***](#EntityManager-의-***동시성***)
+    - [EntityManager 와 ***Transaction***](#EntityManager-와-***Transaction***)
+    - [영속성 컨텍스트 (Persistence Context)](#영속성-컨텍스트-(Persistence-Context))
 
 ### 1-1 SQL을 직접 다룰 때 발생하는 문제점
 
@@ -314,3 +316,24 @@ public class JpaMain {
           method1 이 완벽히 끝나더라도 method2 가 예외를 발생시키면 둘다 안됨.
     - 영속성 컨텍스트가 가지고 있는 캐시가 OutOfMemoryException. ( 이건 뒤에 다시 )
 - [출처](https://medium.com/@SlackBeck/jpa-entitymanager와-동시성-e30f841fcdf8)
+
+#### EntityManager 와 ***Transaction***
+
+- Transaction 을 Entity 에서 가져옴
+    - tx 는 시작, 커밋, 롤백 3가지를 사용하는데<br>
+      시작 후 커밋까지 Entity 에 내리는 명령들을 모아둠<br>
+      커밋 시 모아둔 SQL 명령어들을 DB에 보냄 ( 지연 로딩 )
+    
+#### 영속성 컨텍스트 (Persistence Context)
+- Entity 를 영구 저장하는 환경
+  - DB 와 연결? 되어있는 객체를 관리 하는 곳
+    - 영속 ( 연결 됨 )
+    - 비영속 ( 연결 안 됨, 그냥 객체일 뿐 )
+    - 준영속 ( 연결 해지, 얘도 그냥 객체 )
+    - 삭제 ( 연결 되어 있지만 DB 에 삭제 됨 )
+- 캐시 기능 사용 가능
+  - 같은 데이터를 조회할 때 굳이 DB 에 갈 필요 없음
+- 더티 체킹 가능
+  - 객체가 변경 됐을 때 저장 명령어를 주지 않아도 알아서 update 쿼리를 날림
+  - 스냅샷 을 저장해놓고 그 와 다르면 그 부분을 update 함
+- 지연 로딩
