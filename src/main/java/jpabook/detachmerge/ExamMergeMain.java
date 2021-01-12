@@ -23,6 +23,7 @@ public class ExamMergeMain {
         Member member = new Member();
         member.setId(id);
         member.setUsername(username);
+        member.setAge(30);
         em1.persist(member);
         tx1.commit();
         em1.close();

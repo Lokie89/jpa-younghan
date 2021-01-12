@@ -24,6 +24,9 @@ public class JpaMain {
     }
 
     private static void logic(EntityManager em) {
-        em.persist(new Member());
+//        em.persist(new Member());
+        Board board = new Board();
+        em.persist(board);
+        System.out.println("board.id = " + board.getId());
     }
 }
