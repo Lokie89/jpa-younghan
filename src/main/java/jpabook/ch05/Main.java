@@ -16,9 +16,10 @@ public class Main {
         try {
             tx.begin();
             testSave();
-            queryLogicJoin();
-            updateRelation();
-            deleteRelation();
+//            queryLogicJoin();
+//            updateRelation();
+            biDirection();
+//            deleteRelation();
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
@@ -66,8 +67,17 @@ public class Main {
         member.setTeam(team2);
     }
 
-    private static void deleteRelation(){
+    private static void deleteRelation() {
         Member member1 = em.find(Member.class, "member1");
         member1.setTeam(null);
+    }
+
+    private static void biDirection() {
+        Team team = em.find(Team.class, "team1");
+        List<Member> members = team.getMembers();
+        System.out.println("###############################"+members.size());
+        for (Member member : members) {
+            System.out.println("member.username = " + member.getUsername());
+        }
     }
 }

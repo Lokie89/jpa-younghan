@@ -16,8 +16,8 @@ dependencies {
     compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.4.10.Final'
     compile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: '1.0.0.Final'
     compile group: 'com.h2database', name: 'h2', version: '1.4.195'
-    compile group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
-
+    compileOnly 'org.projectlombok:lombok:1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
 }
 
 test {

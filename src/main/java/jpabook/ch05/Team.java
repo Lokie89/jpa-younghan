@@ -1,10 +1,12 @@
 package jpabook.ch05;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.Data;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Data
 @Table(name = "TEAM")
 @Entity
 public class Team {
@@ -24,19 +26,7 @@ public class Team {
 
     private String name;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    @OneToMany(mappedBy = "team")
+    private List<Member> members = new ArrayList<>();
 
-    public String getId() {
-        return id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
 }
