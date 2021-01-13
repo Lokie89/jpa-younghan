@@ -307,6 +307,11 @@ public class JpaMain {
     Member 는 테이블 MEMBER 가 아닌 객체 Member 이다.
     사용법은 하면서 익히자.
 
+- 사용법
+    - :parameter : 파라미 바인딩 문법<br>
+      e.g) select m from Member m join m.team t where t.name=:teamName<br>
+      ```em.createQuery(jpql, Member.class).setParameter("teamName", "팀1")```
+
 #### EntityManager 의 ***동시성***
 
 - EntityManager 는 다른 스레드 사이에서 공유해선 안 됨.
@@ -350,3 +355,18 @@ public class JpaMain {
     - enum 객체 사용 시
 - @Temporal
     - 날짜 타입
+
+#### 연관관계 매핑
+
+- DB 테이블에서는 다른 테이블의 FK 를 통하여 연관관계를 갖지만<br>
+  객체에서는 참조를 통하여 연관관계를 갖는다.<br>
+  따라서 데이터 베이스를 객체에 매핑시킬 때 이를 포함하여 연결시켜 줘야 한다.
+- ``방향, 다중성, 연관관계의 주인``을 고려해서 연관관계를 성립한다.
+
+### 5-1 단방향 연관관계
+
+- @ManyToOne
+    - 다대일 관계를 나타낼 때 사용한다.
+- @JoinColumn
+    - 외래 키를 매핑할 때 사용한다.
+    - 생략 시 (필드명 + "_" + 참조하는 테이블의 컬럼명) 으로 사용한다.
